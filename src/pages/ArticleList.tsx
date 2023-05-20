@@ -8,8 +8,10 @@ import Footer from "components/Footer";
 export default function ArticleList() {
   const { user } = useContext(UserContext);
   const [articles, setArticles] = useState<Array<Article>>([]);
+  const [isGlobalFeed, setIsGlobalFeed] = useState<boolean>(false);
   useEffect(() => {
-    fetch("http://localhost:3000/api/articles", {
+    if (!user) setIsGlobalFeed(true);
+    fetch(`http://localhost:3000/api/articles${isGlobalFeed ? "" : "feed"}`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -20,7 +22,7 @@ export default function ArticleList() {
         setArticles(data.articles);
       });
     console.log(user);
-  }, []);
+  }, [isGlobalFeed]);
   return (
     <>
       <Navbar />
@@ -39,21 +41,30 @@ export default function ArticleList() {
               <div className="feed-toggle">
                 <ul className="nav nav-pills outline-active">
                   <li className="nav-item">
-                    <a className="nav-link disabled" href="">
+                    <a
+                      onClick={() => setIsGlobalFeed(false)}
+                      className={`nav-link ${user ? "" : "disabled"} ${isGlobalFeed ? "" : "active"}`}
+                    >
                       Your Feed
                     </a>
                   </li>
                   <li className="nav-item">
-                    <a className="nav-link active" href="">
+                    <a onClick={() => setIsGlobalFeed(true)} className={`nav-link ${isGlobalFeed ? "active" : ""}`}>
                       Global Feed
                     </a>
                   </li>
                 </ul>
               </div>
 
-              {articles.map(article => {
-                return <ArticleItem key={article.slug} article={article} />;
-              })}
+              {articles && articles.length !== 0 ? (
+                articles.map(article => {
+                  return <ArticleItem key={article.slug} article={article} />;
+                })
+              ) : (
+                <div className="col-md-3 message-text">
+                  <p>No articles are here...</p>
+                </div>
+              )}
             </div>
 
             <div className="col-md-3">

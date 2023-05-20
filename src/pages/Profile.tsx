@@ -97,9 +97,15 @@ const Profile: React.FC = () => {
                 </ul>
               </div>
 
-              {articles.map(article => {
-                return <ArticleItem key={article.slug} article={article} />;
-              })}
+              {articles && articles.length !== 0 ? (
+                articles.map(article => {
+                  return <ArticleItem key={article.slug} article={article} />;
+                })
+              ) : (
+                <div className="col-md-3 message-text">
+                  <p>No articles are here...</p>
+                </div>
+              )}
             </div>
           </div>
         </div>

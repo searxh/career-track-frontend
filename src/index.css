@@ -4,3 +4,8 @@
   float: left;
   margin-right: 5px;
 }
+
+.message-text {
+  padding-top: 1.5rem;
+  padding-bottom: 1.5rem;
+}
