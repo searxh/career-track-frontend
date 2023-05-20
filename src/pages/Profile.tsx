@@ -42,7 +42,7 @@ const Profile: React.FC = () => {
           <div className="container">
             <div className="row">
               <div className="col-xs-12 col-md-10 offset-md-1">
-                <img src="http://i.imgur.com/Qr71crq.jpg" className="user-img" />
+                <img src="profile_pic.jpeg" className="user-img" />
                 <h4>{profile?.username}</h4>
                 <p>{profile?.bio}</p>
                 <button className="btn btn-sm btn-outline-secondary action-btn">

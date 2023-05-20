@@ -8,7 +8,7 @@ export default function AuthorInfo({ author, createdAt }: AuthorProps) {
   return (
     <>
       <a href={`/#/profile/${author.username}`}>
-        <img src="http://i.imgur.com/Qr71crq.jpg" />
+        <img src="profile_pic.jpeg" />
       </a>
       <div className="info">
         <a href={`/#/profile/${author.username}`} className="author">

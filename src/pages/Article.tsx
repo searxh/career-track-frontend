@@ -78,7 +78,7 @@ const Article: React.FC = () => {
                   <textarea className="form-control" placeholder="Write a comment..." rows={3} />
                 </div>
                 <div className="card-footer">
-                  <img src="http://i.imgur.com/Qr71crq.jpg" className="comment-author-img" />
+                  <img src="profile_pic.jpeg" className="comment-author-img" />
                   <button className="btn btn-sm btn-primary">Post Comment</button>
                 </div>
               </form>
@@ -89,7 +89,7 @@ const Article: React.FC = () => {
                 </div>
                 <div className="card-footer">
                   <a href="/#/profile/jacobschmidt" className="comment-author">
-                    <img src="http://i.imgur.com/Qr71crq.jpg" className="comment-author-img" />
+                    <img src="profile_pic.jpeg" className="comment-author-img" />
                   </a>
                   &nbsp;
                   <a href="/#/profile/jacobschmidt" className="comment-author">
@@ -105,7 +105,7 @@ const Article: React.FC = () => {
                 </div>
                 <div className="card-footer">
                   <a href="/#/profile/jacobschmidt" className="comment-author">
-                    <img src="http://i.imgur.com/Qr71crq.jpg" className="comment-author-img" />
+                    <img src="profile_pic.jpeg" className="comment-author-img" />
                   </a>
                   &nbsp;
                   <a href="/#/profile/jacobschmidt" className="comment-author">
