@@ -1,5 +1,9 @@
 import { useState, useEffect } from "react";
+import { Article } from "types";
+import ArticleItem from "../components/ArticleItem";
+
 export default function ArticleList() {
+  const [articles, setArticles] = useState<Array<Article>>([]);
   useEffect(() => {
     fetch("http://localhost:3000/api/articles", {
       method: "GET",
@@ -9,7 +13,7 @@ export default function ArticleList() {
     })
       .then(response => response.json())
       .then(data => {
-        console.log(data);
+        setArticles(data.articles);
       });
   }, []);
   return (
@@ -78,49 +82,9 @@ export default function ArticleList() {
                 </ul>
               </div>
 
-              <div className="article-preview">
-                <div className="article-meta">
-                  <a href="/#/profile/ericsimmons">
-                    <img src="http://i.imgur.com/Qr71crq.jpg" />
-                  </a>
-                  <div className="info">
-                    <a href="/#/profile/ericsimmons" className="author">
-                      Eric Simons
-                    </a>
-                    <span className="date">January 20th</span>
-                  </div>
-                  <button className="btn btn-outline-primary btn-sm pull-xs-right">
-                    <i className="ion-heart" /> 29
-                  </button>
-                </div>
-                <a href="/#/how-to-build-webapps-that-scale" className="preview-link">
-                  <h1>How to build webapps that scale</h1>
-                  <p>This is the description for the post.</p>
-                  <span>Read more...</span>
-                </a>
-              </div>
-
-              <div className="article-preview">
-                <div className="article-meta">
-                  <a href="/#/profile/albertpai">
-                    <img src="http://i.imgur.com/N4VcUeJ.jpg" />
-                  </a>
-                  <div className="info">
-                    <a href="/#/profile/albertpai" className="author">
-                      Albert Pai
-                    </a>
-                    <span className="date">January 20th</span>
-                  </div>
-                  <button className="btn btn-outline-primary btn-sm pull-xs-right">
-                    <i className="ion-heart" /> 32
-                  </button>
-                </div>
-                <a href="/#/the-song-you-wont-ever-stop-singing" className="preview-link">
-                  <h1>The song you won&lsquo;t ever stop singing. No matter how hard you try.</h1>
-                  <p>This is the description for the post.</p>
-                  <span>Read more...</span>
-                </a>
-              </div>
+              {articles.map(article => {
+                return <ArticleItem key={article.slug} article={article} />;
+              })}
             </div>
 
             <div className="col-md-3">
