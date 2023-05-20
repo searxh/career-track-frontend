@@ -18,4 +18,12 @@ type Profile = {
   following: boolean;
 };
 
-export type { Article, Profile };
+type User = {
+  email: string;
+  token: string;
+  username: string;
+  bio: string;
+  image: string;
+};
+
+export type { Article, Profile, User };

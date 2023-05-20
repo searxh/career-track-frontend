@@ -1,8 +1,10 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import { Article } from "types";
 import ArticleItem from "../components/ArticleItem";
+import { UserContext } from "App";
 
 export default function ArticleList() {
+  const { user } = useContext(UserContext);
   const [articles, setArticles] = useState<Array<Article>>([]);
   useEffect(() => {
     fetch("http://localhost:3000/api/articles", {
@@ -15,13 +17,14 @@ export default function ArticleList() {
       .then(data => {
         setArticles(data.articles);
       });
+    console.log(user);
   }, []);
   return (
     <>
       <nav className="navbar navbar-light">
         <div className="container">
           <a className="navbar-brand" href="/#">
-            conduit
+            conduit {user?.username}
           </a>
           <ul className="nav navbar-nav pull-xs-right">
             <li className="nav-item">
