@@ -1,4 +1,17 @@
+import { useState, useEffect } from "react";
 export default function ArticleList() {
+  useEffect(() => {
+    fetch("http://localhost:3000/api/articles", {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    })
+      .then(response => response.json())
+      .then(data => {
+        console.log(data);
+      });
+  }, []);
   return (
     <>
       <nav className="navbar navbar-light">
