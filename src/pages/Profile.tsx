@@ -1,5 +1,5 @@
 import { useContext, useEffect, useState } from "react";
-import { useHistory, useParams } from "react-router-dom";
+import { useHistory, useLocation, useParams } from "react-router-dom";
 import { Article, Profile as ProfileType } from "types";
 import ArticleItem from "../components/ArticleItem";
 import Navbar from "components/Navbar";
@@ -11,6 +11,7 @@ const Profile: React.FC = () => {
   const { user } = useContext(UserContext);
   const { username } = useParams<{ username: string }>();
   const history = useHistory();
+  const location = useLocation();
   const [profile, setProfile] = useState<ProfileType>();
   const [articles, setArticles] = useState<Array<Article>>([]);
   useEffect(() => {
@@ -25,18 +26,23 @@ const Profile: React.FC = () => {
         console.log(data);
         setProfile(data.profile);
       });
-    fetch(`http://localhost:3000/api/articles?author=${username}`, {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-      },
-    })
+    fetch(
+      `http://localhost:3000/api/articles?${
+        location.pathname.includes("favorites") ? "favorited" : "author"
+      }=${username}`,
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    )
       .then(response => response.json())
       .then(data => {
         console.log(data);
         setArticles(data.articles);
       });
-  }, [username]);
+  }, [username, location.pathname]);
   return (
     <>
       <Navbar />
@@ -73,12 +79,18 @@ const Profile: React.FC = () => {
               <div className="articles-toggle">
                 <ul className="nav nav-pills outline-active">
                   <li className="nav-item">
-                    <a className="nav-link active" href="">
+                    <a
+                      className={`nav-link ${location.pathname.includes("favorites") ? "" : "active"}`}
+                      href={`/#/profile/${username}`}
+                    >
                       My Articles
                     </a>
                   </li>
                   <li className="nav-item">
-                    <a className="nav-link" href="">
+                    <a
+                      className={`nav-link ${location.pathname.includes("favorites") ? "active" : ""}`}
+                      href={`/#/profile/${username}/favorites`}
+                    >
                       Favorited Articles
                     </a>
                   </li>
