@@ -1,4 +1,23 @@
-export default function Article() {
+import { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
+import { Article as ArticleType } from "types";
+
+const Article: React.FC = () => {
+  const { slug } = useParams<{ slug: string }>();
+  const [article, setArticle] = useState<ArticleType>();
+  useEffect(() => {
+    fetch(`http://localhost:3000/api/articles/${slug}`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    })
+      .then(response => response.json())
+      .then(data => {
+        console.log(data);
+        setArticle(data.article);
+      });
+  }, [slug]);
   return (
     <>
       <nav className="navbar navbar-light">
@@ -42,7 +61,7 @@ export default function Article() {
       <div className="article-page">
         <div className="banner">
           <div className="container">
-            <h1>How to build webapps that scale</h1>
+            <h1>{article?.title}</h1>
 
             <div className="article-meta">
               <a href="/#/profile/ericsimmons">
@@ -50,18 +69,18 @@ export default function Article() {
               </a>
               <div className="info">
                 <a href="/#/profile/ericsimmons" className="author">
-                  Eric Simons
+                  {article?.author.username}
                 </a>
-                <span className="date">January 20th</span>
+                <span className="date">{article?.createdAt}</span>
               </div>
               <button className="btn btn-sm btn-outline-secondary">
                 <i className="ion-plus-round" />
-                &nbsp; Follow Eric Simons <span className="counter">(10)</span>
+                &nbsp; Follow {article?.author.username} <span className="counter">(10)</span>
               </button>
               &nbsp;&nbsp;
               <button className="btn btn-sm btn-outline-primary">
                 <i className="ion-heart" />
-                &nbsp; Favorite Post <span className="counter">(29)</span>
+                &nbsp; Favorite Post <span className="counter">({article?.favoritesCount})</span>
               </button>
             </div>
           </div>
@@ -70,9 +89,7 @@ export default function Article() {
         <div className="container page">
           <div className="row article-content">
             <div className="col-md-12">
-              <p>Web development technologies have evolved at an incredible clip over the past few years.</p>
-              <h2 id="introducing-ionic">Introducing RealWorld.</h2>
-              <p>It&lsquo;s a great solution for learning how other frameworks work.</p>
+              <p>{article?.body}</p>
             </div>
           </div>
 
@@ -80,18 +97,18 @@ export default function Article() {
 
           <div className="article-actions">
             <div className="article-meta">
-              <a href="/#/profile/ericsimmons">
+              <a href={`/#/profile/${article?.author.username}`}>
                 <img src="http://i.imgur.com/Qr71crq.jpg" />
               </a>
               <div className="info">
-                <a href="/#/profile/ericsimmons" className="author">
-                  Eric Simons
+                <a href={`/#/profile/${article?.author.username}`} className="author">
+                  {article?.author.username}
                 </a>
-                <span className="date">January 20th</span>
+                <span className="date">{article?.createdAt}</span>
               </div>
               <button className="btn btn-sm btn-outline-secondary">
                 <i className="ion-plus-round" />
-                &nbsp; Follow Eric Simons
+                &nbsp; Follow {article?.author.username}
               </button>
               &nbsp;
               <button className="btn btn-sm btn-outline-primary">
@@ -166,4 +183,6 @@ export default function Article() {
       </footer>
     </>
   );
-}
+};
+
+export default Article;
