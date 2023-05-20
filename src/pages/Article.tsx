@@ -2,6 +2,9 @@ import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { Article as ArticleType } from "types";
 import ReactMarkDown from "react-markdown";
+import AuthorInfo from "components/AuthorInfo";
+import FollowAuthorButton from "components/FollowAuthorButton";
+import FavoriteArticleButton from "components/FavoriteArticleButton";
 
 const Article: React.FC = () => {
   const { slug } = useParams<{ slug: string }>();
@@ -63,26 +66,15 @@ const Article: React.FC = () => {
         <div className="banner">
           <div className="container">
             <h1>{article?.title}</h1>
-
             <div className="article-meta">
-              <a href={`/#/profile/${article?.author.username}`}>
-                <img src="http://i.imgur.com/Qr71crq.jpg" />
-              </a>
-              <div className="info">
-                <a href={`/#/profile/${article?.author.username}`} className="author">
-                  {article?.author.username}
-                </a>
-                <span className="date">{article?.createdAt}</span>
-              </div>
-              <button className="btn btn-sm btn-outline-secondary">
-                <i className="ion-plus-round" />
-                &nbsp; Follow {article?.author.username} <span className="counter">(10)</span>
-              </button>
-              &nbsp;&nbsp;
-              <button className="btn btn-sm btn-outline-primary">
-                <i className="ion-heart" />
-                &nbsp; Favorite Post <span className="counter">({article?.favoritesCount})</span>
-              </button>
+              {article ? (
+                <>
+                  <AuthorInfo author={article.author} createdAt={article.createdAt} />
+                  <FollowAuthorButton author={article.author} />
+                  &nbsp;&nbsp;
+                  <FavoriteArticleButton article={article} />
+                </>
+              ) : null}
             </div>
           </div>
         </div>
@@ -102,24 +94,14 @@ const Article: React.FC = () => {
 
           <div className="article-actions">
             <div className="article-meta">
-              <a href={`/#/profile/${article?.author.username}`}>
-                <img src="http://i.imgur.com/Qr71crq.jpg" />
-              </a>
-              <div className="info">
-                <a href={`/#/profile/${article?.author.username}`} className="author">
-                  {article?.author.username}
-                </a>
-                <span className="date">{article?.createdAt}</span>
-              </div>
-              <button className="btn btn-sm btn-outline-secondary">
-                <i className="ion-plus-round" />
-                &nbsp; Follow {article?.author.username}
-              </button>
-              &nbsp;
-              <button className="btn btn-sm btn-outline-primary">
-                <i className="ion-heart" />
-                &nbsp; Favorite Post <span className="counter">(29)</span>
-              </button>
+              {article ? (
+                <>
+                  <AuthorInfo author={article.author} createdAt={article.createdAt} />
+                  <FollowAuthorButton author={article.author} />
+                  &nbsp;&nbsp;
+                  <FavoriteArticleButton article={article} />
+                </>
+              ) : null}
             </div>
           </div>
 
