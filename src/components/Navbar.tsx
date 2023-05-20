@@ -6,7 +6,6 @@ export default function Navbar() {
   const { user } = useContext(UserContext);
   const routes = ["/", "/editor", "/settings", `/profile/${user?.username}`, "/login", "/register"];
   const location = useLocation();
-  console.log(location.pathname);
   return (
     <>
       <nav className="navbar navbar-light">

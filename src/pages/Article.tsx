@@ -36,7 +36,7 @@ const Article: React.FC = () => {
               {article ? (
                 <>
                   <AuthorInfo author={article.author} createdAt={article.createdAt} />
-                  <FollowAuthorButton author={article.author} />
+                  <FollowAuthorButton username={article.author.username} />
                   &nbsp;&nbsp;
                   <FavoriteArticleButton article={article} />
                 </>
@@ -63,7 +63,7 @@ const Article: React.FC = () => {
               {article ? (
                 <>
                   <AuthorInfo author={article.author} createdAt={article.createdAt} />
-                  <FollowAuthorButton author={article.author} />
+                  <FollowAuthorButton username={article.author.username} />
                   &nbsp;&nbsp;
                   <FavoriteArticleButton article={article} />
                 </>

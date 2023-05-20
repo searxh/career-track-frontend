@@ -1,12 +1,16 @@
-import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useContext, useEffect, useState } from "react";
+import { useHistory, useParams } from "react-router-dom";
 import { Article, Profile as ProfileType } from "types";
 import ArticleItem from "../components/ArticleItem";
 import Navbar from "components/Navbar";
 import Footer from "components/Footer";
+import { UserContext } from "App";
+import FollowAuthorButton from "components/FollowAuthorButton";
 
 const Profile: React.FC = () => {
+  const { user } = useContext(UserContext);
   const { username } = useParams<{ username: string }>();
+  const history = useHistory();
   const [profile, setProfile] = useState<ProfileType>();
   const [articles, setArticles] = useState<Array<Article>>([]);
   useEffect(() => {
@@ -45,10 +49,19 @@ const Profile: React.FC = () => {
                 <img src="profile_pic.jpeg" className="user-img" />
                 <h4>{profile?.username}</h4>
                 <p>{profile?.bio}</p>
-                <button className="btn btn-sm btn-outline-secondary action-btn">
-                  <i className="ion-plus-round" />
-                  &nbsp; Follow {profile?.username}
-                </button>
+                {user?.username === username ? (
+                  <button
+                    onClick={() => {
+                      history.push("/settings");
+                    }}
+                    className={`btn btn-sm btn-outline-secondary action-btn`}
+                  >
+                    <i className="ion-gear-a" />
+                    &nbsp; Edit Profile Settings
+                  </button>
+                ) : (
+                  <FollowAuthorButton username={username} className="action-btn" />
+                )}
               </div>
             </div>
           </div>
