@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { Article as ArticleType } from "types";
+import ReactMarkDown from "react-markdown";
 
 const Article: React.FC = () => {
   const { slug } = useParams<{ slug: string }>();
@@ -89,7 +90,11 @@ const Article: React.FC = () => {
         <div className="container page">
           <div className="row article-content">
             <div className="col-md-12">
-              <p>{article?.body}</p>
+              {article ? (
+                <p>
+                  <ReactMarkDown>{article.body}</ReactMarkDown>
+                </p>
+              ) : null}
             </div>
           </div>
 
