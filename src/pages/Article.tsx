@@ -64,11 +64,11 @@ const Article: React.FC = () => {
             <h1>{article?.title}</h1>
 
             <div className="article-meta">
-              <a href="/#/profile/ericsimmons">
+              <a href={`/#/profile/${article?.author.username}`}>
                 <img src="http://i.imgur.com/Qr71crq.jpg" />
               </a>
               <div className="info">
-                <a href="/#/profile/ericsimmons" className="author">
+                <a href={`/#/profile/${article?.author.username}`} className="author">
                   {article?.author.username}
                 </a>
                 <span className="date">{article?.createdAt}</span>

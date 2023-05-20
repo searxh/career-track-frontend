@@ -1,4 +1,36 @@
-export default function Profile() {
+import { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
+import { Article, Profile as ProfileType } from "types";
+import ArticleItem from "../components/ArticleItem";
+
+const Profile: React.FC = () => {
+  const { username } = useParams<{ username: string }>();
+  const [profile, setProfile] = useState<ProfileType>();
+  const [articles, setArticles] = useState<Array<Article>>([]);
+  useEffect(() => {
+    fetch(`http://localhost:3000/api/profiles/${username}`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    })
+      .then(response => response.json())
+      .then(data => {
+        console.log(data);
+        setProfile(data.profile);
+      });
+    fetch(`http://localhost:3000/api/articles?author=${username}`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    })
+      .then(response => response.json())
+      .then(data => {
+        console.log(data);
+        setArticles(data.articles);
+      });
+  }, [username]);
   return (
     <>
       <nav className="navbar navbar-light">
@@ -45,14 +77,11 @@ export default function Profile() {
             <div className="row">
               <div className="col-xs-12 col-md-10 offset-md-1">
                 <img src="http://i.imgur.com/Qr71crq.jpg" className="user-img" />
-                <h4>Eric Simons</h4>
-                <p>
-                  Cofounder @GoThinkster, lived in Aol&lsquo;s HQ for a few months, kinda looks like Peeta from the
-                  Hunger Games
-                </p>
+                <h4>{profile?.username}</h4>
+                <p>{profile?.bio}</p>
                 <button className="btn btn-sm btn-outline-secondary action-btn">
                   <i className="ion-plus-round" />
-                  &nbsp; Follow Eric Simons
+                  &nbsp; Follow {profile?.username}
                 </button>
               </div>
             </div>
@@ -77,53 +106,9 @@ export default function Profile() {
                 </ul>
               </div>
 
-              <div className="article-preview">
-                <div className="article-meta">
-                  <a href="/#/profile/ericsimmons">
-                    <img src="http://i.imgur.com/Qr71crq.jpg" />
-                  </a>
-                  <div className="info">
-                    <a href="/#/profile/ericsimmons" className="author">
-                      Eric Simons
-                    </a>
-                    <span className="date">January 20th</span>
-                  </div>
-                  <button className="btn btn-outline-primary btn-sm pull-xs-right">
-                    <i className="ion-heart" /> 29
-                  </button>
-                </div>
-                <a href="/#/how-to-build-webapps-that-scale" className="preview-link">
-                  <h1>How to build webapps that scale</h1>
-                  <p>This is the description for the post.</p>
-                  <span>Read more...</span>
-                </a>
-              </div>
-
-              <div className="article-preview">
-                <div className="article-meta">
-                  <a href="/#/profile/albertpai">
-                    <img src="http://i.imgur.com/N4VcUeJ.jpg" />
-                  </a>
-                  <div className="info">
-                    <a href="/#/profile/albertpai" className="author">
-                      Albert Pai
-                    </a>
-                    <span className="date">January 20th</span>
-                  </div>
-                  <button className="btn btn-outline-primary btn-sm pull-xs-right">
-                    <i className="ion-heart" /> 32
-                  </button>
-                </div>
-                <a href="/#/the-song-you-wont-ever-stop-singing" className="preview-link">
-                  <h1>The song you won&lsquo;t ever stop singing. No matter how hard you try.</h1>
-                  <p>This is the description for the post.</p>
-                  <span>Read more...</span>
-                  <ul className="tag-list">
-                    <li className="tag-default tag-pill tag-outline">Music</li>
-                    <li className="tag-default tag-pill tag-outline">Song</li>
-                  </ul>
-                </a>
-              </div>
+              {articles.map(article => {
+                return <ArticleItem key={article.slug} article={article} />;
+              })}
             </div>
           </div>
         </div>
@@ -142,4 +127,6 @@ export default function Profile() {
       </footer>
     </>
   );
-}
+};
+
+export default Profile;
