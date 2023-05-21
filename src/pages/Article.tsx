@@ -8,6 +8,7 @@ import FavoriteArticleButton from "components/FavoriteArticleButton";
 import Navbar from "components/Navbar";
 import Footer from "components/Footer";
 import { UserContext } from "App";
+import format from "date-fns/format";
 
 const Article: React.FC = () => {
   const { user } = useContext(UserContext);

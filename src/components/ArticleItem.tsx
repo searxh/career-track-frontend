@@ -1,6 +1,7 @@
 import { Article } from "types";
 import AuthorInfo from "./AuthorInfo";
 import FavoriteArticleButton from "./FavoriteArticleButton";
+import format from "date-fns/format";
 
 type ArticleItemProps = {
   article: Article;
