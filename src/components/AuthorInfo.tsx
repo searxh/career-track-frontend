@@ -1,11 +1,11 @@
 import { Profile } from "types";
 import format from "date-fns/format";
 
-type AuthorProps = {
+type AuthorInfoProps = {
   author: Profile;
   createdAt: string;
 };
-export default function AuthorInfo({ author, createdAt }: AuthorProps) {
+const AuthorInfo: React.FC<AuthorInfoProps> = ({ author, createdAt }: AuthorInfoProps) => {
   return (
     <>
       <a href={`/#/profile/${author.username}`}>
@@ -19,4 +19,6 @@ export default function AuthorInfo({ author, createdAt }: AuthorProps) {
       </div>
     </>
   );
-}
+};
+
+export default AuthorInfo;

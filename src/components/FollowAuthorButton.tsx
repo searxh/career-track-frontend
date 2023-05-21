@@ -7,8 +7,13 @@ type FollowAuthorButtonProps = {
   onFollowCallback: () => unknown;
   className?: string;
 };
-export default function FollowAuthorButton({ author, onFollowCallback, className }: FollowAuthorButtonProps) {
+const FollowAuthorButton: React.FC<FollowAuthorButtonProps> = ({
+  author,
+  onFollowCallback,
+  className,
+}: FollowAuthorButtonProps) => {
   const { user, setUser } = useContext(UserContext);
+
   const handleFollow = () => {
     console.log(user?.token);
     fetch(`http://localhost:3000/api/profiles/${author.username}/follow`, {
@@ -29,6 +34,7 @@ export default function FollowAuthorButton({ author, onFollowCallback, className
         }
       });
   };
+
   return (
     <>
       {user?.username !== author.username ? (
@@ -39,4 +45,6 @@ export default function FollowAuthorButton({ author, onFollowCallback, className
       ) : null}
     </>
   );
-}
+};
+
+export default FollowAuthorButton;

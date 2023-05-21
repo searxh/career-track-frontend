@@ -8,18 +8,20 @@ import FavoriteArticleButton from "components/FavoriteArticleButton";
 import Navbar from "components/Navbar";
 import Footer from "components/Footer";
 import { UserContext } from "App";
-import format from "date-fns/format";
 
 const Article: React.FC = () => {
   const { user } = useContext(UserContext);
   const { slug } = useParams<{ slug: string }>();
   const [article, setArticle] = useState<ArticleType>();
-  const fetchConfig: { [key: string]: any } = {
-    method: "GET",
-    headers: {},
-  };
-  if (user) fetchConfig.headers.Authorization = `Token ${user.token}`;
+
   const fetchArticles = () => {
+    const fetchConfig: RequestInit = {
+      method: "GET",
+      headers: {},
+    };
+    if (user) {
+      fetchConfig.headers = { ...fetchConfig.headers, Authorization: `Token ${user.token}` };
+    }
     fetch(`http://localhost:3000/api/articles/${slug}`, fetchConfig)
       .then(response => response.json())
       .then(data => {
@@ -27,9 +29,12 @@ const Article: React.FC = () => {
         setArticle(data.article);
       });
   };
+
   useEffect(() => {
     fetchArticles();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [slug]);
+
   return (
     <>
       <Navbar />

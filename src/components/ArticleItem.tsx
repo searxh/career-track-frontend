@@ -1,13 +1,12 @@
 import { Article } from "types";
 import AuthorInfo from "./AuthorInfo";
 import FavoriteArticleButton from "./FavoriteArticleButton";
-import format from "date-fns/format";
 
 type ArticleItemProps = {
   article: Article;
   onFavoriteCallback: () => void;
 };
-export default function ArticleItem({ article, onFavoriteCallback }: ArticleItemProps) {
+const ArticleItem: React.FC<ArticleItemProps> = ({ article, onFavoriteCallback }: ArticleItemProps) => {
   const { author, createdAt, title, description, slug } = article;
   return (
     <>
@@ -24,4 +23,6 @@ export default function ArticleItem({ article, onFavoriteCallback }: ArticleItem
       </div>
     </>
   );
-}
+};
+
+export default ArticleItem;

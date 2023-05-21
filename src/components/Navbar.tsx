@@ -1,11 +1,12 @@
 import { UserContext } from "App";
-import { useContext, useState } from "react";
+import { useContext } from "react";
 import { useLocation } from "react-router-dom";
 
-export default function Navbar() {
+const Navbar: React.FC = () => {
   const { user } = useContext(UserContext);
   const routes = ["/", "/editor", "/settings", `/profile/${user?.username}`, "/login", "/register"];
   const location = useLocation();
+
   return (
     <>
       <nav className="navbar navbar-light">
@@ -65,4 +66,6 @@ export default function Navbar() {
       </nav>
     </>
   );
-}
+};
+
+export default Navbar;

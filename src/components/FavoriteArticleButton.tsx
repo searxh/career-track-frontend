@@ -7,7 +7,11 @@ type FavoriteArticleButtonProps = {
   isMinified?: boolean;
   onFavoriteCallback: () => void;
 };
-export default function FavoriteArticleButton({ article, isMinified, onFavoriteCallback }: FavoriteArticleButtonProps) {
+const FavoriteArticleButton: React.FC<FavoriteArticleButtonProps> = ({
+  article,
+  isMinified,
+  onFavoriteCallback,
+}: FavoriteArticleButtonProps) => {
   const { user, setUser } = useContext(UserContext);
 
   const handleFavorite = () => {
@@ -52,4 +56,6 @@ export default function FavoriteArticleButton({ article, isMinified, onFavoriteC
       )}
     </>
   );
-}
+};
+
+export default FavoriteArticleButton;

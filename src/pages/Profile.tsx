@@ -15,13 +15,15 @@ const Profile: React.FC = () => {
   const [profile, setProfile] = useState<ProfileType>();
   const [articles, setArticles] = useState<Array<Article>>([]);
   const [isLoading, setIsLoading] = useState<boolean>(true);
-  const fetchConfig: { [key: string]: any } = {
-    method: "GET",
-    headers: {},
-  };
-  if (user) fetchConfig.headers.Authorization = `Token ${user.token}`;
 
   const fetchArticles = () => {
+    const fetchConfig: RequestInit = {
+      method: "GET",
+      headers: {},
+    };
+    if (user) {
+      fetchConfig.headers = { ...fetchConfig.headers, Authorization: `Token ${user.token}` };
+    }
     setIsLoading(true);
     fetch(
       `http://localhost:3000/api/articles?${
@@ -37,6 +39,13 @@ const Profile: React.FC = () => {
       });
   };
   const fetchProfile = () => {
+    const fetchConfig: RequestInit = {
+      method: "GET",
+      headers: {},
+    };
+    if (user) {
+      fetchConfig.headers = { ...fetchConfig.headers, Authorization: `Token ${user.token}` };
+    }
     fetch(`http://localhost:3000/api/profiles/${username}`, fetchConfig)
       .then(response => response.json())
       .then(data => {
@@ -48,7 +57,9 @@ const Profile: React.FC = () => {
   useEffect(() => {
     fetchProfile();
     fetchArticles();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [username, location.pathname]);
+
   return (
     <>
       <Navbar />

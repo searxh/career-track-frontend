@@ -1,4 +1,4 @@
-import React, { SetStateAction, createContext, useEffect, useState } from "react";
+import React, { SetStateAction, createContext, useState } from "react";
 import { HashRouter as Router, Switch, Route } from "react-router-dom";
 
 import Article from "./pages/Article";
@@ -16,18 +16,25 @@ type UserContextType = {
   setUser: React.Dispatch<SetStateAction<User | undefined>>;
 };
 
-export const UserContext = createContext(null as unknown as UserContextType);
+export const UserContext = createContext<UserContextType>({
+  user: {
+    username: "",
+    email: "",
+    bio: "",
+    token: "",
+    image: "",
+  },
+  // eslint-disable-next-line @typescript-eslint/no-empty-function
+  setUser: () => {},
+});
 
-function App() {
-  const getUserState = () => {
+const App: React.FC = () => {
+  const [user, setUser] = useState<User | undefined>(() => {
     const user = sessionStorage.getItem("user");
     if (!user) return;
     return JSON.parse(user);
-  };
-  const [user, setUser] = useState<User | undefined>(getUserState());
-  useEffect(() => {
-    console.log(user);
-  }, [user]);
+  });
+
   return (
     <UserContext.Provider
       value={{
@@ -51,6 +58,6 @@ function App() {
       </Router>
     </UserContext.Provider>
   );
-}
+};
 
 export default App;

@@ -1,4 +1,4 @@
-export default function Footer() {
+const Footer: React.FC = () => {
   return (
     <>
       <footer>
@@ -14,4 +14,6 @@ export default function Footer() {
       </footer>
     </>
   );
-}
+};
+
+export default Footer;

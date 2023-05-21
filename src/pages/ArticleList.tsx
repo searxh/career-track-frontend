@@ -5,21 +5,25 @@ import { UserContext } from "App";
 import Navbar from "components/Navbar";
 import Footer from "components/Footer";
 
-export default function ArticleList() {
+const ArticleList: React.FC = () => {
   const { user, setUser } = useContext(UserContext);
   const [articles, setArticles] = useState<Array<Article>>([]);
   const [isGlobalFeed, setIsGlobalFeed] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(true);
 
   const fetchFeed = () => {
-    const fetchConfig: { [key: string]: any } = {
+    const fetchConfig: RequestInit = {
       method: "GET",
       headers: {},
     };
+    let isGlobal = isGlobalFeed;
     if (user) {
-      fetchConfig.headers.Authorization = `Token ${user.token}`;
-    } else setIsGlobalFeed(true);
-    fetch(`http://localhost:3000/api/articles${isGlobalFeed ? "" : "/feed"}`, fetchConfig)
+      fetchConfig.headers = { ...fetchConfig.headers, Authorization: `Token ${user.token}` };
+    } else {
+      isGlobal = true;
+      setIsGlobalFeed(true);
+    }
+    fetch(`http://localhost:3000/api/articles${isGlobal ? "" : "/feed"}`, fetchConfig)
       .then(response => response.json())
       .then(data => {
         console.log(data);
@@ -36,7 +40,9 @@ export default function ArticleList() {
   useEffect(() => {
     setIsLoading(true);
     fetchFeed();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isGlobalFeed, user]);
+
   return (
     <>
       <Navbar />
@@ -123,4 +129,6 @@ export default function ArticleList() {
       <Footer />
     </>
   );
-}
+};
+
+export default ArticleList;

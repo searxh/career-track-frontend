@@ -3,8 +3,9 @@ import Footer from "components/Footer";
 import Navbar from "components/Navbar";
 import { useContext, useEffect, useRef } from "react";
 import { useHistory } from "react-router-dom";
+import { User } from "types";
 
-export default function Settings() {
+const Settings: React.FC = () => {
   const imageRef = useRef<HTMLInputElement>(null);
   const nameRef = useRef<HTMLInputElement>(null);
   const bioRef = useRef<HTMLTextAreaElement>(null);
@@ -13,25 +14,27 @@ export default function Settings() {
   const history = useHistory();
 
   const handleUpdateSettings = () => {
-    const fetchConfig: { [key: string]: any } = {
+    const fetchConfig: RequestInit = {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
         Authorization: `Token ${user?.token}`,
       },
-      body: {
-        user: {},
-      },
+      body: "",
     };
-    if (imageRef.current?.value || imageRef.current?.value !== user?.image)
-      fetchConfig.body.user.image = imageRef.current?.value;
+    const tempBody: { user: { [key: string]: string } } = {
+      user: {},
+    };
+    if (imageRef.current?.value && imageRef.current?.value !== user?.image)
+      tempBody.user.image = imageRef.current?.value;
     if (nameRef?.current?.value && nameRef.current.value !== user?.username)
-      fetchConfig.body.user.username = nameRef.current.value;
-    if (bioRef?.current?.value && bioRef.current.value !== user?.bio) fetchConfig.body.user.bio = bioRef.current.value;
+      tempBody.user.username = nameRef.current.value;
+    if (bioRef?.current?.value && bioRef.current.value !== user?.bio) tempBody.user.bio = bioRef.current.value;
     if (emailRef?.current?.value && emailRef.current.value !== user?.email)
-      fetchConfig.body.user.email = emailRef.current.value;
-    fetchConfig.body = JSON.stringify(fetchConfig.body);
-    console.log(fetchConfig);
+      tempBody.user.email = emailRef.current.value;
+
+    fetchConfig.body = JSON.stringify(tempBody);
+
     fetch(`http://localhost:3000/api/user`, fetchConfig)
       .then(response => response.json())
       .then(data => {
@@ -43,20 +46,23 @@ export default function Settings() {
           setUser(undefined);
           sessionStorage.removeItem("user");
         }
-      })
-      .catch(err => {
-        console.log(err);
       });
+  };
+
+  const initializeValues = (user: User) => {
+    if (imageRef.current) imageRef.current.value = user.image;
+    if (nameRef.current) nameRef.current.value = user.username;
+    if (bioRef.current) bioRef.current.value = user.bio;
+    if (emailRef.current) emailRef.current.value = user.email;
   };
 
   useEffect(() => {
     if (user) {
-      if (imageRef.current) imageRef.current.value = user.image;
-      if (nameRef.current) nameRef.current.value = user.username;
-      if (bioRef.current) bioRef.current.value = user.bio;
-      if (emailRef.current) emailRef.current.value = user.email;
+      initializeValues(user);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user]);
+
   return (
     <>
       <Navbar />
@@ -112,4 +118,6 @@ export default function Settings() {
       <Footer />
     </>
   );
-}
+};
+
+export default Settings;
