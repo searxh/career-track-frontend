@@ -1,20 +1,19 @@
 import { Article } from "types";
 import AuthorInfo from "./AuthorInfo";
+import FavoriteArticleButton from "./FavoriteArticleButton";
 
-type ArticleListProps = {
+type ArticleItemProps = {
   article: Article;
+  onFavoriteCallback: () => void;
 };
-export default function ArticleList({ article }: ArticleListProps) {
-  const { author, createdAt, title, description, slug, favoritesCount } = article;
-  console.log(article);
+export default function ArticleItem({ article, onFavoriteCallback }: ArticleItemProps) {
+  const { author, createdAt, title, description, slug } = article;
   return (
     <>
       <div className="article-preview">
         <div className="article-meta">
           <AuthorInfo author={author} createdAt={createdAt} />
-          <button className="btn btn-outline-primary btn-sm pull-xs-right">
-            <i className="ion-heart" /> {favoritesCount}
-          </button>
+          <FavoriteArticleButton article={article} onFavoriteCallback={onFavoriteCallback} isMinified />
         </div>
         <a href={`/#/${slug}`} className="preview-link">
           <h1>{title}</h1>

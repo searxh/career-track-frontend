@@ -108,7 +108,7 @@ const Profile: React.FC = () => {
 
               {articles && articles.length !== 0 ? (
                 articles.map(article => {
-                  return <ArticleItem key={article.slug} article={article} />;
+                  return <ArticleItem key={article.slug} article={article} onFavoriteCallback={fetchArticles} />;
                 })
               ) : (
                 <div className="col-md-3 message-text">

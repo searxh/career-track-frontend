@@ -13,7 +13,6 @@ const Article: React.FC = () => {
   const { user } = useContext(UserContext);
   const { slug } = useParams<{ slug: string }>();
   const [article, setArticle] = useState<ArticleType>();
-  const [refresh, setRefresh] = useState<boolean>(false);
   const fetchConfig: { [key: string]: any } = {
     method: "GET",
     headers: {
@@ -46,7 +45,7 @@ const Article: React.FC = () => {
                   <AuthorInfo author={article.author} createdAt={article.createdAt} />
                   <FollowAuthorButton author={article.author} onFollowCallback={fetchArticles} />
                   &nbsp;&nbsp;
-                  <FavoriteArticleButton article={article} />
+                  <FavoriteArticleButton article={article} onFavoriteCallback={fetchArticles} />
                 </>
               ) : null}
             </div>
@@ -55,13 +54,7 @@ const Article: React.FC = () => {
 
         <div className="container page">
           <div className="row article-content">
-            <div className="col-md-12">
-              {article ? (
-                <p>
-                  <ReactMarkDown>{article.body}</ReactMarkDown>
-                </p>
-              ) : null}
-            </div>
+            <div className="col-md-12">{article ? <ReactMarkDown>{article.body}</ReactMarkDown> : null}</div>
           </div>
 
           <hr />
@@ -73,7 +66,7 @@ const Article: React.FC = () => {
                   <AuthorInfo author={article.author} createdAt={article.createdAt} />
                   <FollowAuthorButton author={article.author} onFollowCallback={fetchArticles} />
                   &nbsp;&nbsp;
-                  <FavoriteArticleButton article={article} />
+                  <FavoriteArticleButton article={article} onFavoriteCallback={fetchArticles} />
                 </>
               ) : null}
             </div>

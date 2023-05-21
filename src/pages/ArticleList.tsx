@@ -9,7 +9,7 @@ export default function ArticleList() {
   const { user } = useContext(UserContext);
   const [articles, setArticles] = useState<Array<Article>>([]);
   const [isGlobalFeed, setIsGlobalFeed] = useState<boolean>(false);
-  useEffect(() => {
+  const fetchFeed = () => {
     if (!user) setIsGlobalFeed(true);
     fetch(`http://localhost:3000/api/articles${isGlobalFeed ? "" : "/feed"}`, {
       method: "GET",
@@ -22,7 +22,9 @@ export default function ArticleList() {
       .then(data => {
         setArticles(data.articles);
       });
-    console.log(user);
+  };
+  useEffect(() => {
+    fetchFeed();
   }, [isGlobalFeed]);
   return (
     <>
@@ -41,14 +43,13 @@ export default function ArticleList() {
             <div className="col-md-9">
               <div className="feed-toggle">
                 <ul className="nav nav-pills outline-active">
-                  <li className="nav-item">
-                    <a
-                      onClick={() => setIsGlobalFeed(false)}
-                      className={`nav-link ${user ? "" : "disabled"} ${isGlobalFeed ? "" : "active"}`}
-                    >
-                      Your Feed
-                    </a>
-                  </li>
+                  {user ? (
+                    <li className="nav-item">
+                      <a onClick={() => setIsGlobalFeed(false)} className={`nav-link ${isGlobalFeed ? "" : "active"}`}>
+                        Your Feed
+                      </a>
+                    </li>
+                  ) : null}
                   <li className="nav-item">
                     <a onClick={() => setIsGlobalFeed(true)} className={`nav-link ${isGlobalFeed ? "active" : ""}`}>
                       Global Feed
@@ -59,7 +60,7 @@ export default function ArticleList() {
 
               {articles && articles.length !== 0 ? (
                 articles.map(article => {
-                  return <ArticleItem key={article.slug} article={article} />;
+                  return <ArticleItem key={article.slug} article={article} onFavoriteCallback={fetchFeed} />;
                 })
               ) : (
                 <div className="col-md-3 message-text">

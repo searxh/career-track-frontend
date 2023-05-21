@@ -28,10 +28,12 @@ export default function FollowAuthorButton({ author, onFollowCallback, className
   };
   return (
     <>
-      <button onClick={handleFollow} className={`btn btn-sm btn-outline-secondary ${className}`}>
-        <i className="ion-plus-round" />
-        &nbsp; {author.following ? "Unfollow" : "Follow"} {author.username}
-      </button>
+      {user?.username !== author.username ? (
+        <button onClick={handleFollow} className={`btn btn-sm btn-outline-secondary ${className}`}>
+          <i className="ion-plus-round" />
+          &nbsp; {author.following ? "Unfollow" : "Follow"} {author.username}
+        </button>
+      ) : null}
     </>
   );
 }
