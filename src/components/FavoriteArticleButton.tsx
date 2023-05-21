@@ -9,6 +9,7 @@ type FavoriteArticleButtonProps = {
 };
 export default function FavoriteArticleButton({ article, isMinified, onFavoriteCallback }: FavoriteArticleButtonProps) {
   const { user, setUser } = useContext(UserContext);
+
   const handleFavorite = () => {
     console.log(user?.token);
     fetch(`http://localhost:3000/api/articles/${article.slug}/favorite`, {
@@ -29,6 +30,7 @@ export default function FavoriteArticleButton({ article, isMinified, onFavoriteC
         }
       });
   };
+
   return (
     <>
       {isMinified ? (

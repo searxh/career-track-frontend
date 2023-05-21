@@ -1,7 +1,7 @@
 import { UserContext } from "App";
 import Footer from "components/Footer";
 import Navbar from "components/Navbar";
-import { useContext, useRef } from "react";
+import { useContext, useRef, useState } from "react";
 import { useHistory } from "react-router-dom";
 
 const Login: React.FC = () => {
@@ -9,6 +9,7 @@ const Login: React.FC = () => {
   const history = useHistory();
   const emailRef = useRef<HTMLInputElement>(null);
   const passwordRef = useRef<HTMLInputElement>(null);
+  const [isError, setIsError] = useState<boolean>(false);
 
   const handleSignIn = () => {
     fetch("http://localhost:3000/api/users/login", {
@@ -26,9 +27,13 @@ const Login: React.FC = () => {
       .then(response => response.json())
       .then(data => {
         console.log(data);
-        setUser(data.user);
-        sessionStorage.setItem("user", JSON.stringify(data.user));
-        history.push("/");
+        if (data.user) {
+          setUser(data.user);
+          sessionStorage.setItem("user", JSON.stringify(data.user));
+          history.push("/");
+        } else if (data.message) {
+          setIsError(true);
+        }
       });
   };
   return (
@@ -43,6 +48,12 @@ const Login: React.FC = () => {
               <p className="text-xs-center">
                 <a href="/#/register">Need an account?</a>
               </p>
+
+              {isError ? (
+                <ul className="error-messages">
+                  <li>Email or password is invalid</li>
+                </ul>
+              ) : null}
 
               <form>
                 <fieldset className="form-group">

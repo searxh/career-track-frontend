@@ -9,6 +9,8 @@ export default function ArticleList() {
   const { user, setUser } = useContext(UserContext);
   const [articles, setArticles] = useState<Array<Article>>([]);
   const [isGlobalFeed, setIsGlobalFeed] = useState<boolean>(false);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
+
   const fetchFeed = () => {
     const fetchConfig: { [key: string]: any } = {
       method: "GET",
@@ -23,13 +25,16 @@ export default function ArticleList() {
         console.log(data);
         if (data.articles) {
           setArticles(data.articles);
+          setIsLoading(false);
         } else if (data.message === "Unauthorized") {
           setUser(undefined);
           sessionStorage.removeItem("user");
         }
       });
   };
+
   useEffect(() => {
+    setIsLoading(true);
     fetchFeed();
   }, [isGlobalFeed, user]);
   return (
@@ -64,7 +69,11 @@ export default function ArticleList() {
                 </ul>
               </div>
 
-              {articles && articles.length !== 0 ? (
+              {isLoading ? (
+                <div className="col-md-3 message-text">
+                  <p>Loading articles...</p>
+                </div>
+              ) : articles && articles.length !== 0 ? (
                 articles.map(article => {
                   return <ArticleItem key={article.slug} article={article} onFavoriteCallback={fetchFeed} />;
                 })

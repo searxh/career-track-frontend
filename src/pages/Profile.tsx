@@ -14,12 +14,15 @@ const Profile: React.FC = () => {
   const location = useLocation();
   const [profile, setProfile] = useState<ProfileType>();
   const [articles, setArticles] = useState<Array<Article>>([]);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
   const fetchConfig: { [key: string]: any } = {
     method: "GET",
     headers: {},
   };
   if (user) fetchConfig.headers.Authorization = `Token ${user.token}`;
+
   const fetchArticles = () => {
+    setIsLoading(true);
     fetch(
       `http://localhost:3000/api/articles?${
         location.pathname.includes("favorites") ? "favorited" : "author"
@@ -30,6 +33,7 @@ const Profile: React.FC = () => {
       .then(data => {
         console.log(data);
         setArticles(data.articles);
+        setIsLoading(false);
       });
   };
   const fetchProfile = () => {
@@ -40,6 +44,7 @@ const Profile: React.FC = () => {
         setProfile(data.profile);
       });
   };
+
   useEffect(() => {
     fetchProfile();
     fetchArticles();
@@ -104,7 +109,11 @@ const Profile: React.FC = () => {
                 </ul>
               </div>
 
-              {articles && articles.length !== 0 ? (
+              {isLoading ? (
+                <div className="col-md-3 message-text">
+                  <p>Loading articles...</p>
+                </div>
+              ) : articles && articles.length !== 0 ? (
                 articles.map(article => {
                   return <ArticleItem key={article.slug} article={article} onFavoriteCallback={fetchArticles} />;
                 })
