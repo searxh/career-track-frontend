@@ -32,7 +32,6 @@ const Article: React.FC = () => {
 
   useEffect(() => {
     fetchArticles();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [slug]);
 
   return (

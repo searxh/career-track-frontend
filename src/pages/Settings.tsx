@@ -60,7 +60,6 @@ const Settings: React.FC = () => {
     if (user) {
       initializeValues(user);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user]);
 
   return (

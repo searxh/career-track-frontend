@@ -57,7 +57,6 @@ const Profile: React.FC = () => {
   useEffect(() => {
     fetchProfile();
     fetchArticles();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [username, location.pathname]);
 
   return (

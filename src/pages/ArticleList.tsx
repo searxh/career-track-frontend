@@ -40,7 +40,6 @@ const ArticleList: React.FC = () => {
   useEffect(() => {
     setIsLoading(true);
     fetchFeed();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isGlobalFeed, user]);
 
   return (

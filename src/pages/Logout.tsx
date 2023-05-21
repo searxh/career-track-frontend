@@ -12,7 +12,6 @@ const Logout: React.FC = () => {
     setUser(undefined);
     sessionStorage.removeItem("user");
     history.push("/");
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (

@@ -24,8 +24,7 @@ export const UserContext = createContext<UserContextType>({
     token: "",
     image: "",
   },
-  // eslint-disable-next-line @typescript-eslint/no-empty-function
-  setUser: () => {},
+  setUser: () => undefined,
 });
 
 const App: React.FC = () => {
