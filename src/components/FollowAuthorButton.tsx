@@ -1,5 +1,6 @@
 import { UserContext } from "App";
 import { useContext } from "react";
+import { useHistory } from "react-router-dom";
 import { Profile } from "types";
 
 type FollowAuthorButtonProps = {
@@ -13,26 +14,30 @@ const FollowAuthorButton: React.FC<FollowAuthorButtonProps> = ({
   className,
 }: FollowAuthorButtonProps) => {
   const { user, setUser } = useContext(UserContext);
+  const history = useHistory();
 
   const handleFollow = () => {
-    console.log(user?.token);
-    fetch(`http://localhost:3000/api/profiles/${author.username}/follow`, {
-      method: author.following ? "DELETE" : "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Token ${user?.token}`,
-      },
-    })
-      .then(response => response.json())
-      .then(data => {
-        console.log(data);
-        if (data.profile) {
-          onFollowCallback();
-        } else if (data.message === "Unauthorized") {
-          setUser(undefined);
-          sessionStorage.removeItem("user");
-        }
-      });
+    if (user) {
+      fetch(`http://localhost:3000/api/profiles/${author.username}/follow`, {
+        method: author.following ? "DELETE" : "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Token ${user.token}`,
+        },
+      })
+        .then(response => response.json())
+        .then(data => {
+          console.log(data);
+          if (data.profile) {
+            onFollowCallback();
+          } else if (data.message === "Unauthorized") {
+            setUser(undefined);
+            sessionStorage.removeItem("user");
+          }
+        });
+    } else {
+      history.push("/login");
+    }
   };
 
   return (

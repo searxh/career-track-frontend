@@ -1,5 +1,6 @@
 import { UserContext } from "App";
 import { useContext } from "react";
+import { useHistory } from "react-router-dom";
 import { Article } from "types";
 
 type FavoriteArticleButtonProps = {
@@ -13,26 +14,30 @@ const FavoriteArticleButton: React.FC<FavoriteArticleButtonProps> = ({
   onFavoriteCallback,
 }: FavoriteArticleButtonProps) => {
   const { user, setUser } = useContext(UserContext);
+  const history = useHistory();
 
   const handleFavorite = () => {
-    console.log(user?.token);
-    fetch(`http://localhost:3000/api/articles/${article.slug}/favorite`, {
-      method: article.favorited ? "DELETE" : "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Token ${user?.token}`,
-      },
-    })
-      .then(response => response.json())
-      .then(data => {
-        console.log(data);
-        if (data.article) {
-          onFavoriteCallback();
-        } else if (data.message === "Unauthorized") {
-          setUser(undefined);
-          sessionStorage.removeItem("user");
-        }
-      });
+    if (user) {
+      fetch(`http://localhost:3000/api/articles/${article.slug}/favorite`, {
+        method: article.favorited ? "DELETE" : "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Token ${user?.token}`,
+        },
+      })
+        .then(response => response.json())
+        .then(data => {
+          console.log(data);
+          if (data.article) {
+            onFavoriteCallback();
+          } else if (data.message === "Unauthorized") {
+            setUser(undefined);
+            sessionStorage.removeItem("user");
+          }
+        });
+    } else {
+      history.push("/login");
+    }
   };
 
   return (
