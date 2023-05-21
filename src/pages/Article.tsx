@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { Article as ArticleType } from "types";
 import ReactMarkDown from "react-markdown";
@@ -7,22 +7,30 @@ import FollowAuthorButton from "components/FollowAuthorButton";
 import FavoriteArticleButton from "components/FavoriteArticleButton";
 import Navbar from "components/Navbar";
 import Footer from "components/Footer";
+import { UserContext } from "App";
 
 const Article: React.FC = () => {
+  const { user } = useContext(UserContext);
   const { slug } = useParams<{ slug: string }>();
   const [article, setArticle] = useState<ArticleType>();
-  useEffect(() => {
-    fetch(`http://localhost:3000/api/articles/${slug}`, {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-      },
-    })
+  const [refresh, setRefresh] = useState<boolean>(false);
+  const fetchConfig: { [key: string]: any } = {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+    },
+  };
+  if (user) fetchConfig.headers.Authorization = `Token ${user.token}`;
+  const fetchArticles = () => {
+    fetch(`http://localhost:3000/api/articles/${slug}`, fetchConfig)
       .then(response => response.json())
       .then(data => {
         console.log(data);
         setArticle(data.article);
       });
+  };
+  useEffect(() => {
+    fetchArticles();
   }, [slug]);
   return (
     <>
@@ -36,7 +44,7 @@ const Article: React.FC = () => {
               {article ? (
                 <>
                   <AuthorInfo author={article.author} createdAt={article.createdAt} />
-                  <FollowAuthorButton username={article.author.username} />
+                  <FollowAuthorButton author={article.author} onFollowCallback={fetchArticles} />
                   &nbsp;&nbsp;
                   <FavoriteArticleButton article={article} />
                 </>
@@ -63,7 +71,7 @@ const Article: React.FC = () => {
               {article ? (
                 <>
                   <AuthorInfo author={article.author} createdAt={article.createdAt} />
-                  <FollowAuthorButton username={article.author.username} />
+                  <FollowAuthorButton author={article.author} onFollowCallback={fetchArticles} />
                   &nbsp;&nbsp;
                   <FavoriteArticleButton article={article} />
                 </>

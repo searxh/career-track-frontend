@@ -11,10 +11,11 @@ export default function ArticleList() {
   const [isGlobalFeed, setIsGlobalFeed] = useState<boolean>(false);
   useEffect(() => {
     if (!user) setIsGlobalFeed(true);
-    fetch(`http://localhost:3000/api/articles${isGlobalFeed ? "" : "feed"}`, {
+    fetch(`http://localhost:3000/api/articles${isGlobalFeed ? "" : "/feed"}`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
+        Authorization: `Token ${user?.token}`,
       },
     })
       .then(response => response.json())

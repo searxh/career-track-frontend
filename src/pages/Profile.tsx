@@ -14,34 +14,37 @@ const Profile: React.FC = () => {
   const location = useLocation();
   const [profile, setProfile] = useState<ProfileType>();
   const [articles, setArticles] = useState<Array<Article>>([]);
-  useEffect(() => {
-    fetch(`http://localhost:3000/api/profiles/${username}`, {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-      },
-    })
-      .then(response => response.json())
-      .then(data => {
-        console.log(data);
-        setProfile(data.profile);
-      });
+  const fetchConfig: { [key: string]: any } = {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+    },
+  };
+  if (user) fetchConfig.headers.Authorization = `Token ${user.token}`;
+  const fetchArticles = () => {
     fetch(
       `http://localhost:3000/api/articles?${
         location.pathname.includes("favorites") ? "favorited" : "author"
       }=${username}`,
-      {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-        },
-      }
+      fetchConfig
     )
       .then(response => response.json())
       .then(data => {
         console.log(data);
         setArticles(data.articles);
       });
+  };
+  const fetchProfile = () => {
+    fetch(`http://localhost:3000/api/profiles/${username}`, fetchConfig)
+      .then(response => response.json())
+      .then(data => {
+        console.log(data);
+        setProfile(data.profile);
+      });
+  };
+  useEffect(() => {
+    fetchProfile();
+    fetchArticles();
   }, [username, location.pathname]);
   return (
     <>
@@ -65,9 +68,15 @@ const Profile: React.FC = () => {
                     <i className="ion-gear-a" />
                     &nbsp; Edit Profile Settings
                   </button>
-                ) : (
-                  <FollowAuthorButton username={username} className="action-btn" />
-                )}
+                ) : profile ? (
+                  <FollowAuthorButton
+                    author={profile}
+                    onFollowCallback={() => {
+                      fetchProfile();
+                    }}
+                    className="action-btn"
+                  />
+                ) : null}
               </div>
             </div>
           </div>
