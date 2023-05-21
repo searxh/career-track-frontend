@@ -39,6 +39,9 @@ export default function Settings() {
           setUser(data.user);
           sessionStorage.setItem("user", JSON.stringify(data.user));
           history.push(`/profile/${data.user.username}`);
+        } else if (data.message === "Unauthorized") {
+          setUser(undefined);
+          sessionStorage.removeItem("user");
         }
       })
       .catch(err => {
@@ -53,7 +56,7 @@ export default function Settings() {
       if (bioRef.current) bioRef.current.value = user.bio;
       if (emailRef.current) emailRef.current.value = user.email;
     }
-  }, []);
+  }, [user]);
   return (
     <>
       <Navbar />

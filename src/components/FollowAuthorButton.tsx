@@ -8,7 +8,7 @@ type FollowAuthorButtonProps = {
   className?: string;
 };
 export default function FollowAuthorButton({ author, onFollowCallback, className }: FollowAuthorButtonProps) {
-  const { user } = useContext(UserContext);
+  const { user, setUser } = useContext(UserContext);
   const handleFollow = () => {
     console.log(user?.token);
     fetch(`http://localhost:3000/api/profiles/${author.username}/follow`, {
@@ -23,6 +23,9 @@ export default function FollowAuthorButton({ author, onFollowCallback, className
         console.log(data);
         if (data.profile) {
           onFollowCallback();
+        } else if (data.message === "Unauthorized") {
+          setUser(undefined);
+          sessionStorage.removeItem("user");
         }
       });
   };

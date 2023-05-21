@@ -8,7 +8,7 @@ type FavoriteArticleButtonProps = {
   onFavoriteCallback: () => void;
 };
 export default function FavoriteArticleButton({ article, isMinified, onFavoriteCallback }: FavoriteArticleButtonProps) {
-  const { user } = useContext(UserContext);
+  const { user, setUser } = useContext(UserContext);
   const handleFavorite = () => {
     console.log(user?.token);
     fetch(`http://localhost:3000/api/articles/${article.slug}/favorite`, {
@@ -23,6 +23,9 @@ export default function FavoriteArticleButton({ article, isMinified, onFavoriteC
         console.log(data);
         if (data.article) {
           onFavoriteCallback();
+        } else if (data.message === "Unauthorized") {
+          setUser(undefined);
+          sessionStorage.removeItem("user");
         }
       });
   };

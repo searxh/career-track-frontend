@@ -6,26 +6,32 @@ import Navbar from "components/Navbar";
 import Footer from "components/Footer";
 
 export default function ArticleList() {
-  const { user } = useContext(UserContext);
+  const { user, setUser } = useContext(UserContext);
   const [articles, setArticles] = useState<Array<Article>>([]);
   const [isGlobalFeed, setIsGlobalFeed] = useState<boolean>(false);
   const fetchFeed = () => {
-    if (!user) setIsGlobalFeed(true);
-    fetch(`http://localhost:3000/api/articles${isGlobalFeed ? "" : "/feed"}`, {
+    const fetchConfig: { [key: string]: any } = {
       method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Token ${user?.token}`,
-      },
-    })
+      headers: {},
+    };
+    if (user) {
+      fetchConfig.headers.Authorization = `Token ${user.token}`;
+    } else setIsGlobalFeed(true);
+    fetch(`http://localhost:3000/api/articles${isGlobalFeed ? "" : "/feed"}`, fetchConfig)
       .then(response => response.json())
       .then(data => {
-        setArticles(data.articles);
+        console.log(data);
+        if (data.articles) {
+          setArticles(data.articles);
+        } else if (data.message === "Unauthorized") {
+          setUser(undefined);
+          sessionStorage.removeItem("user");
+        }
       });
   };
   useEffect(() => {
     fetchFeed();
-  }, [isGlobalFeed]);
+  }, [isGlobalFeed, user]);
   return (
     <>
       <Navbar />
