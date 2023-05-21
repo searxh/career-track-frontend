@@ -42,7 +42,7 @@ export default function Navbar() {
                   className={`nav-link ${location.pathname === routes[3] ? "active" : ""}`}
                   href={`/#/profile/${user.username}`}
                 >
-                  <img className="user-pic" src="profile_pic.jpeg" />
+                  <img className="user-pic" src={user.image.length === 0 ? "profile_pic.jpeg" : user.image} />
                   {user.username}
                 </a>
               </li>

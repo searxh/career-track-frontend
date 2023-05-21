@@ -16,9 +16,7 @@ const Article: React.FC = () => {
   const [article, setArticle] = useState<ArticleType>();
   const fetchConfig: { [key: string]: any } = {
     method: "GET",
-    headers: {
-      "Content-Type": "application/json",
-    },
+    headers: {},
   };
   if (user) fetchConfig.headers.Authorization = `Token ${user.token}`;
   const fetchArticles = () => {

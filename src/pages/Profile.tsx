@@ -16,9 +16,7 @@ const Profile: React.FC = () => {
   const [articles, setArticles] = useState<Array<Article>>([]);
   const fetchConfig: { [key: string]: any } = {
     method: "GET",
-    headers: {
-      "Content-Type": "application/json",
-    },
+    headers: {},
   };
   if (user) fetchConfig.headers.Authorization = `Token ${user.token}`;
   const fetchArticles = () => {
@@ -55,7 +53,7 @@ const Profile: React.FC = () => {
           <div className="container">
             <div className="row">
               <div className="col-xs-12 col-md-10 offset-md-1">
-                <img src="profile_pic.jpeg" className="user-img" />
+                <img src={profile?.image.length === 0 ? "profile_pic.jpeg" : profile?.image} className="user-img" />
                 <h4>{profile?.username}</h4>
                 <p>{profile?.bio}</p>
                 {user?.username === username ? (
