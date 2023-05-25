@@ -1,5 +1,34 @@
 # Assignment for Frontend Engineer job applicants
 
+## Backend Setup
+
+You can run the backend application by executing:
+
+    docker-compose up
+
+You will also need to initialise the database (first time you use it or any time you want to reset it to initial state), to do so run:
+
+    docker-compose run --rm api npm run db:reset
+
+After running the above commands, the API should be accessible on http://localhost:3000/.
+
+## Frontend Setup
+
+You will need to build a docker image from the dockerfile, to do so run:
+
+    docker build -t job-assignment-frontend-engineer .
+
+You can run the frontend application by executing:
+    
+    docker run --rm -p 8080:80 job-assignment-frontend-engineer
+
+After running the above commands, the frontend should be accessible on http://localhost:8080/.
+
+## External Tools
+
+* Docker
+* Git
+
 ## Background
 
 Your task is to implement a simple CRUD application. The application is based on [Conduit, "The mother of all demo apps"](https://github.com/gothinkster/realworld), which is a simple clone of [Medium.com](https://medium.com/). The demo of the application can be found at https://demo.realworld.io/.
